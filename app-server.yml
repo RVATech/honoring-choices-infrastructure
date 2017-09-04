@@ -1,0 +1,68 @@
+---
+- hosts: appserver
+
+  tasks:
+  - name: set the timezone to US Eastern
+    timezone:
+      name: 'America/New_York'
+
+  - name: install nginx
+    apt_repository:
+      repo: 'ppa:nginx/stable'
+      update_cache: true
+    apt: pkg=nginx state=installed
+    notify:
+      - start nginx
+
+  - name: install let's encrypt certbot
+    apt_repository:
+      repo: 'ppa:certbot/certbot'
+      update_cache: true
+    apt: pkg=python-certbot-nginx state=installed
+    notify:
+      - configure certbot
+
+  - name: install redis
+    apt: pkg=redis state=installed
+    # configure a randomly selected password as the REQUIREAUTH parameter
+    notify:
+      - start redis
+
+  - name: install fail2ban
+    apt: pkg=fail2ban, state=installed
+    # configure it to watch ssh2
+    notify:
+      - start fail2ban
+
+  - name: setup ufw
+    - ufw: # setup the basics
+      state: enabled
+      policy: deny
+      logging: yes
+      comment: "Deny anything not explicitly allowed"
+
+    - ufw:
+      rule: limit
+      port: ssh
+      proto: tcp
+      comment: "Setup automatic firewalling of anything initiating 6+ ssh connections in 30 seconds, helps kill DDoS attacks"
+
+    - ufw:
+      rule: allow
+      port: 80
+      proto: tcp
+      comment: "Allow http web traffic"
+
+    - ufw:
+      rule: allow
+      port: 443
+      proto: tcp
+      comment: "Allow secure web traffic"
+
+# todo setup cron jobs
+
+  handlers:
+    - name: start nginx
+      service: name=nginx state=started
+    - name: start redis
+      service: name=redis state=started
