@@ -51,7 +51,7 @@
       rule: allow
       port: 80
       proto: tcp
-      comment: "Allow web traffic"
+      comment: "Allow http web traffic"
 
     - ufw:
       rule: allow
