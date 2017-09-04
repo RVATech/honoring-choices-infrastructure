@@ -11,3 +11,21 @@ resource "aws_db_instance" "death_mysql" {
     CreatedBy = "${var.created_by}"
   }
 }
+
+resource "aws_dynamodb_table" "final_instr_dev" {
+name = "FinalInstrDev"
+read_capacity = 5
+write_capacity = 5
+hash_key = "InstructionId"
+
+attribute{
+  name = "InstructionId"
+  type = "S"
+}
+
+tags {
+  Name = "FinalInstrDev"
+  Environment = "Dev"
+  CreatedBy = "${var.created_by}"
+}
+}
