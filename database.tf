@@ -11,20 +11,3 @@ resource "aws_db_instance" "death_mysql" {
     CreatedBy = "${var.created_by}"
   }
 }
-
-# resource "aws_rds_cluster_instance" "AuroraDeathAppProduction" {
-#     count = 2
-#     identifier = "aurora-cluster-${count.index}"
-#     cluster_identifier = "${aws_rds_cluster.default.id}"
-#     instance_class = "db.r3.medium"
-# }
-
-
-# resource "aws_rds_cluster" "default" {
-#     cluster_identifier = "aurora-death-app-production"
-#     availability_zones = ["us-east-1c", "us-east-1e"]
-#     database_name = "death-db"
-#     master_username = "death-db-user"
-#     master_password = "${var.db_password}"
-# }
-
