@@ -78,3 +78,14 @@ resource "aws_s3_bucket" "hcva-ng-site-prod" {
     CreatedBy   = "${var.created_by}"
   }
 }
+
+resource "aws_s3_bucket" "hcva-lambda" {
+  bucket = "hcva-lambda-repo"
+  acl    = "private"
+
+  tags {
+    Name        = "HC VA Lambda Resource Bucket"
+    Environment = "Infrastructure"
+    CreatedBy   = "${var.created_by}"
+  }
+}
